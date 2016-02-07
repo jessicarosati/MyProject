@@ -5,14 +5,29 @@
  */
 package mailvalidator;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author Jessica
+ * @author Jessica Rosati
  */
 public class GUI_Builder extends javax.swing.JFrame {
+    private File fileInput;
+    private File folderOutput;
+    private BufferedReader br;
+    private BufferedWriter valid_Output_file;
+    private BufferedWriter invalid_Output_file;
 
     /**
      * Creates new form GUI_Builder
@@ -57,6 +72,11 @@ public class GUI_Builder extends javax.swing.JFrame {
         jLabel2.setText("Output Folder");
 
         jButton2.setText("Select");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("About");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -66,6 +86,11 @@ public class GUI_Builder extends javax.swing.JFrame {
         });
 
         jButton4.setText("Start");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -131,16 +156,58 @@ public class GUI_Builder extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-//Button3 just prints a message with Copyright Information and the github reposit6ory address
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        // jButton3 just prints a message with Copyright Information and the github repository address
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
         JOptionPane.showMessageDialog(null,"© 2016, Jessica_Rosati, https://github.com/jessicarosati/MyProject.git");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // jButton1 lets to select an Inut File and write its name into jTextField1
+        JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
+		    	JFileChooser fileChooser = new JFileChooser();
+		    	int returnVal = fileChooser.showOpenDialog(fileChooser);
+		    	if (returnVal == JFileChooser.APPROVE_OPTION) {
+		    	     fileInput = fileChooser.getSelectedFile();
+		    	     jTextField1.setText(fileInput.toString());
+		    	}
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // jButton2 lets to select the output folder and write its name into jTextField2
+        JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
+		    	JFileChooser fileChooser = new JFileChooser();
+                        // we set DIRECTORIES_ONLY mode
+		    	fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		    	int returnVal = fileChooser.showOpenDialog(fileChooser);
+		    	if (returnVal == JFileChooser.APPROVE_OPTION) {
+		    	     folderOutput = fileChooser.getSelectedFile();
+		    	     jTextField2.setText(folderOutput.toString());
+		    	}
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // jButton4 launches the email validator
+                        if(jTextField1.getText().isEmpty()){ //Error message if the Input File has not been selected
+                            JOptionPane.showMessageDialog(null,"Select the Input File Please");
+                        }
+                        else if(jTextField2.getText().isEmpty()){//Error message if the Output Folder has not been selected
+                            JOptionPane.showMessageDialog(null,"Select the Output Folder Please");
+                        }
+                        else if(fileInput==null) {//Error message if the Input File is not a valid file
+                        JOptionPane.showMessageDialog(null,"Input File not valid"); 
+                        }
+                        else if(folderOutput==null) {//Error message if the Output Folder is not a valid folder
+                        JOptionPane.showMessageDialog(null,"Output Folder not valid"); 
+                        }else 
+                        {
+                            //the OutputFolderName is contained in jTextField2
+                            String OutputFolderName = jTextField2.getText();
+                            validateAddresses(fileInput,OutputFolderName);
+                            JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
+                        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -188,4 +255,59 @@ public class GUI_Builder extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
+    private void validateAddresses(File fileInput, String OutputFolderName) {
+        try {
+            try {
+                String name_file = fileInput.toString();
+                // name_file is what follows the last "\", without the file exstension
+                name_file= name_file.substring(name_file.lastIndexOf("\\")).replace(".txt", "");
+                try {
+                    br = new BufferedReader(new FileReader(fileInput.toString()));
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    // the file for valid mail addresses is written inside the output folder;
+                    // its name is the name of the input file with _valid
+                    valid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName+"/"+name_file+"_valid.txt", true) );
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    // the file for invalid mail addresses is written inside the output folder;
+                    // its name is the name of the input file with _invalid
+                    invalid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName+"/"+name_file+"_invalid.txt", true) );
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                String line;
+                while ((line = br.readLine()) != null) {
+                    boolean valid= isValidEmailAddress(line);
+                    if (valid==true) {
+                        System.out.println("valid"+line);
+                        valid_Output_file.append(line);
+                        valid_Output_file.newLine();
+                        
+                    } else {
+                        System.out.println("invalid"+line);
+                        invalid_Output_file.append(line);
+                        invalid_Output_file.newLine();
+                        
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            valid_Output_file.close();
+            invalid_Output_file.close();
+            br.close();
+        } catch (IOException ex) {
+            Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private boolean isValidEmailAddress(String line) {
+        return true;
+    }
 }
