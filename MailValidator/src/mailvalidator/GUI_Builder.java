@@ -265,7 +265,7 @@ public class GUI_Builder extends javax.swing.JFrame {
                 try {
                     br = new BufferedReader(new FileReader(fileInput.toString()));
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, "Input File not found", ex);
                 }
                 try {
                     // the file for valid mail addresses is written inside the output folder;
@@ -307,7 +307,21 @@ public class GUI_Builder extends javax.swing.JFrame {
         }
     }
 
-    private boolean isValidEmailAddress(String line) {
-        return true;
+    private boolean isValidEmailAddress(String mail) {
+        /*
+        ^ matches beginning of line
+        [a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+ means one or more of the previous symbols
+        @ (which is compusory)
+        (([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,})
+        - [a-zA-Z\\-0-9]+\\. means: one or more of symbols [a-zA-Z\\-0-9] followed by "." (\\. means exactly ".")
+        - pay attention to \\- which means that the "-" symbol is allowed
+        - the former structure could be repeated if needed, because of "+"
+        - at least two characters in [a-zA-Z] after the "."
+        $ matches end of line
+        */
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,})$";
+    java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+    java.util.regex.Matcher m = p.matcher(mail);
+    return m.matches(); 
     }
 }
