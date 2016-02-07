@@ -203,20 +203,27 @@ public class GUI_Builder extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(null,"Select the Output Folder Please");
                         }
                         else if((fileInput==null&&!jTextField1.getText().isEmpty())||(folderOutput==null&&!jTextField2.getText().isEmpty())) {
-                            //if the users manually adds the input file or the folder I have to check their existence
+                            //if the user manually adds the input file or the folder I have to check their existence
                             fileInput= new File(jTextField1.getText());
                             folderOutput= new File(jTextField2.getText());
                             if (!fileInput.exists()) {//Error message if the Input File is not a valid file
+                                fileInput=null; //set to null to allow another checking
                                 JOptionPane.showMessageDialog(null,"Input File not valid");
                             } else if(!folderOutput.exists()) {//Error message if the Output Folder is not a valid folder
+                                folderOutput=null; //set to null to allow another checking
                                 JOptionPane.showMessageDialog(null,"Output Folder not valid");
-                            } else {
+                            } else { //if both file and folder are valid, I have to check that the input is a .txt
                             String OutputFolderName = jTextField2.getText();
-                            validateAddresses(fileInput,OutputFolderName);
+                            if (fileInput.toString().endsWith(".txt")) {// the input file is a .txt; I call validateAddresses
+                                validateAddresses(fileInput,OutputFolderName);
                             JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
+                            } else {// the input file is not a .txt: I put fileInput to null to allow another checking
+                                fileInput=null;//set to null to allow another checking
+                               JOptionPane.showMessageDialog(null,"Select a .txt file please");  
                             }                           
-                        }else{
-                            String OutputFolderName = jTextField2.getText();
+                            }                           
+                        }else{//fields not manually inserted and text fields not empty
+                            String OutputFolderName = folderOutput.toString();
                             validateAddresses(fileInput,OutputFolderName);
                             JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
                             }    
