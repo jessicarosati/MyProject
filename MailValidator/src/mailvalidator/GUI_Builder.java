@@ -202,19 +202,25 @@ public class GUI_Builder extends javax.swing.JFrame {
                         else if(jTextField2.getText().isEmpty()){//Error message if the Output Folder has not been selected
                             JOptionPane.showMessageDialog(null,"Select the Output Folder Please");
                         }
-                        else if((fileInput==null&&!jTextField1.getText().isEmpty())||folderOutput==null&&!jTextField2.getText().isEmpty()) {
+                        else if((fileInput==null&&!jTextField1.getText().isEmpty())||(folderOutput==null&&!jTextField2.getText().isEmpty())) {
+                            //if the users manually adds the input file or the folder I have to check their existence
                             fileInput= new File(jTextField1.getText());
                             folderOutput= new File(jTextField2.getText());
                             if (!fileInput.exists()) {//Error message if the Input File is not a valid file
                                 JOptionPane.showMessageDialog(null,"Input File not valid");
-                            } else if(!folderOutput.exists()) {////Error message if the Output Folder is not a valid folder
+                            } else if(!folderOutput.exists()) {//Error message if the Output Folder is not a valid folder
                                 JOptionPane.showMessageDialog(null,"Output Folder not valid");
                             } else {
                             String OutputFolderName = jTextField2.getText();
                             validateAddresses(fileInput,OutputFolderName);
                             JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
                             }                           
-                        }
+                        }else{
+                            String OutputFolderName = jTextField2.getText();
+                            validateAddresses(fileInput,OutputFolderName);
+                            JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
+                            }    
+                        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
