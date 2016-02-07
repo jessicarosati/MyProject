@@ -170,7 +170,14 @@ public class GUI_Builder extends javax.swing.JFrame {
 		    	int returnVal = fileChooser.showOpenDialog(fileChooser);
 		    	if (returnVal == JFileChooser.APPROVE_OPTION) {
 		    	     fileInput = fileChooser.getSelectedFile();
-		    	     jTextField1.setText(fileInput.toString());
+                             // if the selected input file is not a .txt, a message appears;
+                             // otherwise the input file path is written in jTextField1
+                             if (fileInput.toString().endsWith(".txt")) {
+                                jTextField1.setText(fileInput.toString());
+                            } else {
+                               JOptionPane.showMessageDialog(null,"Select a .txt file please");  
+                            }
+		    	     
 		    	}
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -195,17 +202,18 @@ public class GUI_Builder extends javax.swing.JFrame {
                         else if(jTextField2.getText().isEmpty()){//Error message if the Output Folder has not been selected
                             JOptionPane.showMessageDialog(null,"Select the Output Folder Please");
                         }
-                        else if(fileInput==null) {//Error message if the Input File is not a valid file
-                        JOptionPane.showMessageDialog(null,"Input File not valid"); 
-                        }
-                        else if(folderOutput==null) {//Error message if the Output Folder is not a valid folder
-                        JOptionPane.showMessageDialog(null,"Output Folder not valid"); 
-                        }else 
-                        {
-                            //the OutputFolderName is contained in jTextField2
+                        else if((fileInput==null&&!jTextField1.getText().isEmpty())||folderOutput==null&&!jTextField2.getText().isEmpty()) {
+                            fileInput= new File(jTextField1.getText());
+                            folderOutput= new File(jTextField2.getText());
+                            if (!fileInput.exists()) {//Error message if the Input File is not a valid file
+                                JOptionPane.showMessageDialog(null,"Input File not valid");
+                            } else if(!folderOutput.exists()) {////Error message if the Output Folder is not a valid folder
+                                JOptionPane.showMessageDialog(null,"Output Folder not valid");
+                            } else {
                             String OutputFolderName = jTextField2.getText();
                             validateAddresses(fileInput,OutputFolderName);
                             JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
+                            }                           
                         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -270,14 +278,14 @@ public class GUI_Builder extends javax.swing.JFrame {
                 try {
                     // the file for valid mail addresses is written inside the output folder;
                     // its name is the name of the input file with _valid
-                    valid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName+"/"+name_file+"_valid.txt", true) );
+                    valid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName+"/"+name_file+"_valid.txt") );
                 } catch (IOException ex) {
                     Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 try {
                     // the file for invalid mail addresses is written inside the output folder;
                     // its name is the name of the input file with _invalid
-                    invalid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName+"/"+name_file+"_invalid.txt", true) );
+                    invalid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName+"/"+name_file+"_invalid.txt") );
                 } catch (IOException ex) {
                     Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
                 }
