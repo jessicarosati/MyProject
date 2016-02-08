@@ -1,10 +1,14 @@
 package bibtexkeyvalidator;
 
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.util.HashSet;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,6 +24,8 @@ public class CorrectBibtex extends javax.swing.JFrame {
     private File fileInput;
     private String[] invalidDefault = {"#","&","/","\\","'",":","?","<",">"};
     private HashSet<String> invalid_characters = new HashSet<String>();
+    private BufferedReader br;
+    private BufferedWriter correct_file;
 
     /**
      * Creates new form CorrectBibtex
@@ -146,21 +152,51 @@ public class CorrectBibtex extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //jButton2 explain what should be inserted in the near textfield
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
         JOptionPane.showMessageDialog(null,"Introduce comma separated invalid characters");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        //jButton3 prints a copyright message
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
         JOptionPane.showMessageDialog(null,"© 2016, Jessica_Rosati, https://github.com/jessicarosati/MyProject.git");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-                        
+         //jButton1 lets to select a file
+         // and check that its extension is .bib
+        JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
+		    	JFileChooser fileChooser = new JFileChooser();
+		    	int returnVal = fileChooser.showOpenDialog(fileChooser);
+		    	if (returnVal == JFileChooser.APPROVE_OPTION) {
+		    	     fileInput = fileChooser.getSelectedFile();                            
+		    	     // if the selected input file is not a .txt, a message appears;
+                             // otherwise the input file path is written in jTextField1
+                             if (fileInput.toString().endsWith(".bib")) {
+                                jTextField1.setText(fileInput.toString());
+                            } else {
+                               JOptionPane.showMessageDialog(null,"Select a .bib file please");  
+                            }
+                        }          
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-
+        //jButton4 verifies that an input file has been selected 
+        System.out.println(jTextField1.getText());
+        System.out.println(fileInput+fileInput.toString());
+        if(fileInput==null|| jTextField1.getText().isEmpty()|| !fileInput.toString().equals(jTextField1.getText()) ){
+            System.out.println("qui");
+            fileInput=null;
+            JOptionPane.showMessageDialog(null,"Use button Select to select the Input File Please");
+        }else
+        // I verify if the array of inserted invalid characters is written in the right way
+            if(analyseInvalidCharacters(jTextField2)==false) {JOptionPane.showMessageDialog(null,"Wrong way to write Invalid Characters");}
+         else {
+    // I call a FileCorrector   
+            FileCorrector corrector;
+    corrector = new FileCorrector(fileInput,invalid_characters,br, correct_file,invalidDefault);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
@@ -209,5 +245,24 @@ public class CorrectBibtex extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
+    private boolean analyseInvalidCharacters(JTextField jTextField2) {
+        String invalid= jTextField2.getText();
+        if (invalid.isEmpty()) {
+            return true;
+        } else {
+            String[] characters = invalid.split(",");
+            for (int i = 0; i < characters.length; i++) {
+               if (characters[i].length()>1) {
+                return false;
+            } else {
+                   invalid_characters.add(characters[i]);
+                   }
+            }           
+        }
+        return true;
+    }
+
+
 
 }
