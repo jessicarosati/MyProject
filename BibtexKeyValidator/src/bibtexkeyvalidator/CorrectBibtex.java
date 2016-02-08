@@ -55,7 +55,7 @@ public class CorrectBibtex extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("BibTex Validator,  © Jessica_Rosati");
-        setPreferredSize(new java.awt.Dimension(550, 330));
+        setPreferredSize(new java.awt.Dimension(580, 330));
 
         jButton3.setText("About");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -120,9 +120,9 @@ public class CorrectBibtex extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                             .addComponent(jTextField2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,7 +154,7 @@ public class CorrectBibtex extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         //jButton2 explain what should be inserted in the near textfield
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
-        JOptionPane.showMessageDialog(null,"Introduce comma separated invalid characters");
+        JOptionPane.showMessageDialog(null,"Introduce invalid characters separated with a white space");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -183,17 +183,19 @@ public class CorrectBibtex extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         //jButton4 verifies that an input file has been selected 
-        System.out.println(jTextField1.getText());
-        System.out.println(fileInput+fileInput.toString());
         if(fileInput==null|| jTextField1.getText().isEmpty()|| !fileInput.toString().equals(jTextField1.getText()) ){
-            System.out.println("qui");
             fileInput=null;
             JOptionPane.showMessageDialog(null,"Use button Select to select the Input File Please");
+        }else if(jTextField2.getText().isEmpty()){
+            // I call a FileCorrector
+            FileCorrector corrector;
+    corrector = new FileCorrector(fileInput,invalid_characters,br, correct_file,invalidDefault);
         }else
         // I verify if the array of inserted invalid characters is written in the right way
-            if(analyseInvalidCharacters(jTextField2)==false) {JOptionPane.showMessageDialog(null,"Wrong way to write Invalid Characters");}
+            if(analyseInvalidCharacters(jTextField2)==null) {JOptionPane.showMessageDialog(null,"Wrong way to write Invalid Characters");}
          else {
-    // I call a FileCorrector   
+               invalid_characters=analyseInvalidCharacters(jTextField2); 
+    // I call a FileCorrector with invalid_characters just filled
             FileCorrector corrector;
     corrector = new FileCorrector(fileInput,invalid_characters,br, correct_file,invalidDefault);
         }
@@ -246,23 +248,16 @@ public class CorrectBibtex extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 
-    private boolean analyseInvalidCharacters(JTextField jTextField2) {
+    private HashSet<String> analyseInvalidCharacters(JTextField jTextField2) {
         String invalid= jTextField2.getText();
-        if (invalid.isEmpty()) {
-            return true;
-        } else {
-            String[] characters = invalid.split(",");
+            String[] characters = invalid.split(" ");
             for (int i = 0; i < characters.length; i++) {
                if (characters[i].length()>1) {
-                return false;
-            } else {
+                return null;
+            } else {                  
                    invalid_characters.add(characters[i]);
                    }
-            }           
-        }
-        return true;
+            }                 
+        return invalid_characters;
     }
-
-
-
 }

@@ -28,32 +28,31 @@ public class FileCorrector {
             for (int i = 0; i < invalidDefault.length; i++) {
                 invalid_characters.add(invalidDefault[i]);
             }
+            System.out.println("filecorrector"+invalid_characters);
             try {
                 br = new BufferedReader(new FileReader(fileInput.toString()));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, "Input file not found", ex);
             }
             try {
-                Correct_file = new BufferedWriter(new FileWriter(fileInput+"_Correct.bib") );
+                Correct_file = new BufferedWriter(new FileWriter(fileInput.toString().replace(".bib", "")+"_Correct.bib") );
             } catch (IOException ex) {
                 Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, null, ex);
             }
             String line;
             while ((line = br.readLine()) != null) {
                 // I read the file line by line and consider lines starting with @ and ending with ","
-                if (line.startsWith("@")&&line.startsWith(",")) {
+                if (line.startsWith("@")&&line.endsWith(",")) {
                     String head= line.substring(0, line.lastIndexOf("{"));
-                    // I extract the bibtexKey
+                    // I extract the bibtexKey 
                     String bibtexKey = line.substring(line.lastIndexOf("{"), line.lastIndexOf(","));
                     for (Iterator<String> iterator = invalid_characters.iterator(); iterator.hasNext();) {
                         String character = iterator.next();
-                        System.out.println(character);
-                        bibtexKey= bibtexKey.replace(character,"");
+                        bibtexKey= bibtexKey.replace(character,"");// I cancel the invalid_character
                     }
                     String tail= line.substring(line.lastIndexOf(","), line.length());
                     // I rebuild the line with the corrected bibtexKey
                     line=head+bibtexKey+tail;
-                    System.out.println(line);
                     Correct_file.write(line);
                     Correct_file.write("\n");
                 }else{
@@ -61,11 +60,12 @@ public class FileCorrector {
                     Correct_file.write("\n");
                 }
             }
-            JOptionPane.showMessageDialog(null,"Everything fine");
+            JOptionPane.showMessageDialog(null,"Everything fine! Look at "+fileInput+"_Correct.bib");
         } catch (IOException ex) {
             Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, null, ex);
         }
-        try {
+        try {// BufferedReader and BufferedWriter closure
+            br.close();
             Correct_file.close();
         } catch (IOException ex) {
             Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, null, ex);
