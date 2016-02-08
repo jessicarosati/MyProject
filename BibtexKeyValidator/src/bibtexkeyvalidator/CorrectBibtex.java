@@ -1,6 +1,7 @@
 package bibtexkeyvalidator;
 
-
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,14 +16,14 @@ import javax.swing.JTextField;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Jessica
  */
 public class CorrectBibtex extends javax.swing.JFrame {
+
     private File fileInput;
-    private String[] invalidDefault = {"#","&","/","\\","'",":","?","<",">"};
+    private String[] invalidDefault = {"#", "&", "/", "\\", "'", ":", "?", "<", ">"};
     private HashSet<String> invalid_characters = new HashSet<String>();
     private BufferedReader br;
     private BufferedWriter correct_file;
@@ -32,6 +33,8 @@ public class CorrectBibtex extends javax.swing.JFrame {
      */
     public CorrectBibtex() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation((int) (dim.getWidth() - getWidth()) / 12, (int) (dim.getHeight() - getHeight()) / 2);
     }
 
     /**
@@ -99,7 +102,7 @@ public class CorrectBibtex extends javax.swing.JFrame {
 
         jLabel1.setText("Input BibTex File");
 
-        jButton2.setText("About");
+        jButton2.setText("Help");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -122,7 +125,7 @@ public class CorrectBibtex extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                             .addComponent(jTextField2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,50 +157,50 @@ public class CorrectBibtex extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         //jButton2 explain what should be inserted in the near textfield
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
-        JOptionPane.showMessageDialog(null,"Introduce invalid characters separated with a white space");
+        JOptionPane.showMessageDialog(null, "Introduce invalid characters separated with a white space");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         //jButton3 prints a copyright message
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
-        JOptionPane.showMessageDialog(null,"© 2016, Jessica_Rosati, https://github.com/jessicarosati/MyProject.git");
+        JOptionPane.showMessageDialog(null, "© 2016, Jessica_Rosati, https://github.com/jessicarosati/MyProject.git");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         //jButton1 lets to select a file
-         // and check that its extension is .bib
+        //jButton1 lets to select a file
+        // and check that its extension is .bib
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
-		    	JFileChooser fileChooser = new JFileChooser();
-		    	int returnVal = fileChooser.showOpenDialog(fileChooser);
-		    	if (returnVal == JFileChooser.APPROVE_OPTION) {
-		    	     fileInput = fileChooser.getSelectedFile();                            
-		    	     // if the selected input file is not a .txt, a message appears;
-                             // otherwise the input file path is written in jTextField1
-                             if (fileInput.toString().endsWith(".bib")) {
-                                jTextField1.setText(fileInput.toString());
-                            } else {
-                               JOptionPane.showMessageDialog(null,"Select a .bib file please");  
-                            }
-                        }          
+        JFileChooser fileChooser = new JFileChooser();
+        int returnVal = fileChooser.showOpenDialog(fileChooser);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            fileInput = fileChooser.getSelectedFile();
+            // if the selected input file is not a .txt, a message appears;
+            // otherwise the input file path is written in jTextField1
+            if (fileInput.toString().endsWith(".bib")) {
+                jTextField1.setText(fileInput.toString());
+            } else {
+                JOptionPane.showMessageDialog(null, "Select a .bib file please");
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         //jButton4 verifies that an input file has been selected 
-        if(fileInput==null|| jTextField1.getText().isEmpty()|| !fileInput.toString().equals(jTextField1.getText()) ){
-            fileInput=null;
-            JOptionPane.showMessageDialog(null,"Use button Select to select the Input File Please");
-        }else if(jTextField2.getText().isEmpty()){
+        if (fileInput == null || jTextField1.getText().isEmpty() || !fileInput.toString().equals(jTextField1.getText())) {
+            fileInput = null;
+            JOptionPane.showMessageDialog(null, "Use button \"Select\" to select the Input File Please");
+        } else if (jTextField2.getText().isEmpty()) {
             // I call a FileCorrector
             FileCorrector corrector;
-    corrector = new FileCorrector(fileInput,invalid_characters,br, correct_file,invalidDefault);
-        }else
-        // I verify if the array of inserted invalid characters is written in the right way
-            if(analyseInvalidCharacters(jTextField2)==null) {JOptionPane.showMessageDialog(null,"Wrong way to write Invalid Characters");}
-         else {
-               invalid_characters=analyseInvalidCharacters(jTextField2); 
-    // I call a FileCorrector with invalid_characters just filled
+            corrector = new FileCorrector(fileInput, invalid_characters, br, correct_file, invalidDefault);
+        } else // I verify if the array of inserted invalid characters is written in the right way
+        if (analyseInvalidCharacters(jTextField2) == null) {
+            JOptionPane.showMessageDialog(null, "Wrong way to write Invalid Characters. Look at \"Help\" button");
+        } else {
+            invalid_characters = analyseInvalidCharacters(jTextField2);
+            // I call a FileCorrector with invalid_characters just filled
             FileCorrector corrector;
-    corrector = new FileCorrector(fileInput,invalid_characters,br, correct_file,invalidDefault);
+            corrector = new FileCorrector(fileInput, invalid_characters, br, correct_file, invalidDefault);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -249,15 +252,15 @@ public class CorrectBibtex extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private HashSet<String> analyseInvalidCharacters(JTextField jTextField2) {
-        String invalid= jTextField2.getText();
-            String[] characters = invalid.split(" ");
-            for (int i = 0; i < characters.length; i++) {
-               if (characters[i].length()>1) {
+        String invalid = jTextField2.getText();
+        String[] characters = invalid.split(" ");
+        for (int i = 0; i < characters.length; i++) {
+            if (characters[i].length() > 1) {
                 return null;
-            } else {                  
-                   invalid_characters.add(characters[i]);
-                   }
-            }                 
+            } else {
+                invalid_characters.add(characters[i]);
+            }
+        }
         return invalid_characters;
     }
 }

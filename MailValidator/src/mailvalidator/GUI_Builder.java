@@ -5,6 +5,8 @@
  */
 package mailvalidator;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,6 +25,7 @@ import javax.swing.JOptionPane;
  * @author Jessica Rosati
  */
 public class GUI_Builder extends javax.swing.JFrame {
+
     private File fileInput;
     private File folderOutput;
     private BufferedReader br;
@@ -34,6 +37,8 @@ public class GUI_Builder extends javax.swing.JFrame {
      */
     public GUI_Builder() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation((int) (dim.getWidth() - getWidth()) / 10, (int) (dim.getHeight() - getHeight()) / 2);
     }
 
     /**
@@ -57,12 +62,13 @@ public class GUI_Builder extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Email Validator,  © Jessica_Rosati");
+        setLocation(new java.awt.Point(0, 0));
         setPreferredSize(new java.awt.Dimension(550, 330));
         setResizable(false);
 
         jLabel1.setText("Input File");
 
-        jButton1.setText("Select");
+        jButton1.setText("Select I");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -71,7 +77,7 @@ public class GUI_Builder extends javax.swing.JFrame {
 
         jLabel2.setText("Output Folder");
 
-        jButton2.setText("Select");
+        jButton2.setText("Select O");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -107,11 +113,11 @@ public class GUI_Builder extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                             .addComponent(jTextField2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))))
@@ -160,74 +166,88 @@ public class GUI_Builder extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // jButton3 just prints a message with Copyright Information and the github repository address
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
-        JOptionPane.showMessageDialog(null,"© 2016, Jessica_Rosati, https://github.com/jessicarosati/MyProject.git");
+        JOptionPane.showMessageDialog(null, "© 2016, Jessica_Rosati, https://github.com/jessicarosati/MyProject.git");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // jButton1 lets to select an Inut File and write its name into jTextField1
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
-		    	JFileChooser fileChooser = new JFileChooser();
-		    	int returnVal = fileChooser.showOpenDialog(fileChooser);
-		    	if (returnVal == JFileChooser.APPROVE_OPTION) {
-		    	     fileInput = fileChooser.getSelectedFile();
-                             // if the selected input file is not a .txt, a message appears;
-                             // otherwise the input file path is written in jTextField1
-                             if (fileInput.toString().endsWith(".txt")) {
-                                jTextField1.setText(fileInput.toString());
-                            } else {
-                               JOptionPane.showMessageDialog(null,"Select a .txt file please");  
-                            }
-		    	     
-		    	}
+        JFileChooser fileChooser = new JFileChooser();
+        int returnVal = fileChooser.showOpenDialog(fileChooser);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            fileInput = fileChooser.getSelectedFile();
+            // if the selected input file is not a .txt, a message appears;
+            // otherwise the input file path is written in jTextField1
+            if (fileInput.toString().endsWith(".txt")) {
+                jTextField1.setText(fileInput.toString());
+            } else {
+                JOptionPane.showMessageDialog(null, "Select a .txt file please");
+            }
+
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // jButton2 lets to select the output folder and write its name into jTextField2
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
-		    	JFileChooser fileChooser = new JFileChooser();
-                        // we set DIRECTORIES_ONLY mode
-		    	fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		    	int returnVal = fileChooser.showOpenDialog(fileChooser);
-		    	if (returnVal == JFileChooser.APPROVE_OPTION) {
-		    	     folderOutput = fileChooser.getSelectedFile();
-		    	     jTextField2.setText(folderOutput.toString());
-		    	}
+        JFileChooser fileChooser = new JFileChooser();
+        // we set DIRECTORIES_ONLY mode
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int returnVal = fileChooser.showOpenDialog(fileChooser);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            folderOutput = fileChooser.getSelectedFile();
+            jTextField2.setText(folderOutput.toString());
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // jButton4 launches the email validator
-                        if(jTextField1.getText().isEmpty()){ //Error message if the Input File has not been selected
-                            JOptionPane.showMessageDialog(null,"Select the Input File Please");
-                        }
-                        else if(jTextField2.getText().isEmpty()){//Error message if the Output Folder has not been selected
-                            JOptionPane.showMessageDialog(null,"Select the Output Folder Please");
-                        }
-                        else if((fileInput==null&&!jTextField1.getText().isEmpty())||(folderOutput==null&&!jTextField2.getText().isEmpty())) {
-                            //if the user manually adds the input file or the folder I have to check their existence
-                            fileInput= new File(jTextField1.getText());
-                            folderOutput= new File(jTextField2.getText());
-                            if (!fileInput.exists()) {//Error message if the Input File is not a valid file
-                                fileInput=null; //set to null to allow another checking
-                                JOptionPane.showMessageDialog(null,"Input File not valid");
-                            } else if(!folderOutput.exists()) {//Error message if the Output Folder is not a valid folder
-                                folderOutput=null; //set to null to allow another checking
-                                JOptionPane.showMessageDialog(null,"Output Folder not valid");
-                            } else { //if both file and folder are valid, I have to check that the input is a .txt
-                            String OutputFolderName = jTextField2.getText();
-                            if (fileInput.toString().endsWith(".txt")) {// the input file is a .txt; I call validateAddresses
-                                validateAddresses(fileInput,OutputFolderName);
-                            JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
-                            } else {// the input file is not a .txt: I put fileInput to null to allow another checking
-                                fileInput=null;//set to null to allow another checking
-                               JOptionPane.showMessageDialog(null,"Select a .txt file please");  
-                            }                           
-                            }                           
-                        }else{//fields not manually inserted and text fields not empty
-                            String OutputFolderName = folderOutput.toString();
-                            validateAddresses(fileInput,OutputFolderName);
-                            JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
-                            }    
-                        
+        //  
+        if (jTextField1.getText().isEmpty() || fileInput == null || !fileInput.toString().equals(jTextField1.getText())) {
+            //Error message if the Input File has not been correctly selected
+            JOptionPane.showMessageDialog(null, "Use button \"Select I\" to select the Input File please");
+        } else if (jTextField2.getText().isEmpty() || folderOutput == null || !folderOutput.toString().equals(jTextField2.getText())) {
+            //Error message if the Output Folder has not been correctly selected
+            JOptionPane.showMessageDialog(null, "Use button \"Select O\" to select the Output Folder please");
+        } else {
+            String OutputFolderName = folderOutput.toString();
+            validateAddresses(fileInput, OutputFolderName);
+            JOptionPane.showMessageDialog(null, "Validation Successfully Completed");
+        }
+
+        /* if you want to let manually insertion remove this comment and comment previous if-else block
+         if(jTextField1.getText().isEmpty()){ //Error message if the Input File has not been selected
+         JOptionPane.showMessageDialog(null,"Select the Input File Please");
+         }
+         else if(jTextField2.getText().isEmpty()){//Error message if the Output Folder has not been selected
+         JOptionPane.showMessageDialog(null,"Select the Output Folder Please");
+         }
+         else if((fileInput==null&&!jTextField1.getText().isEmpty())||(folderOutput==null&&!jTextField2.getText().isEmpty())) {
+         //if the user manually adds the input file or the folder I have to check their existence
+         fileInput= new File(jTextField1.getText());
+         folderOutput= new File(jTextField2.getText());
+         if (!fileInput.exists()) {//Error message if the Input File is not a valid file
+         fileInput=null; //set to null to allow another checking
+         JOptionPane.showMessageDialog(null,"Input File not valid");
+         } else if(!folderOutput.exists()) {//Error message if the Output Folder is not a valid folder
+         folderOutput=null; //set to null to allow another checking
+         JOptionPane.showMessageDialog(null,"Output Folder not valid");
+         } else { //if both file and folder are valid, I have to check that the input is a .txt
+         String OutputFolderName = jTextField2.getText();
+         if (fileInput.toString().endsWith(".txt")) {// the input file is a .txt; I call validateAddresses
+         validateAddresses(fileInput,OutputFolderName);
+         JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
+         } else {// the input file is not a .txt: I put fileInput to null to allow another checking
+         fileInput=null;//set to null to allow another checking
+         JOptionPane.showMessageDialog(null,"Select a .txt file please");  
+         }                           
+         }                           
+         }else{//fields not manually inserted and text fields not empty
+         String OutputFolderName = folderOutput.toString();
+         validateAddresses(fileInput,OutputFolderName);
+         JOptionPane.showMessageDialog(null,"Validation Successfully Completed");
+         }    
+         */
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
@@ -282,7 +302,7 @@ public class GUI_Builder extends javax.swing.JFrame {
             try {
                 String name_file = fileInput.toString();
                 // name_file is what follows the last "\", without the file exstension
-                name_file= name_file.substring(name_file.lastIndexOf("\\")).replace(".txt", "");
+                name_file = name_file.substring(name_file.lastIndexOf("\\")).replace(".txt", "");
                 try {
                     br = new BufferedReader(new FileReader(fileInput.toString()));
                 } catch (FileNotFoundException ex) {
@@ -291,30 +311,29 @@ public class GUI_Builder extends javax.swing.JFrame {
                 try {
                     // the file for valid mail addresses is written inside the output folder;
                     // its name is the name of the input file with _valid
-                    valid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName+"/"+name_file+"_valid.txt") );
+                    valid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName + "/" + name_file + "_valid.txt"));
                 } catch (IOException ex) {
                     Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 try {
                     // the file for invalid mail addresses is written inside the output folder;
                     // its name is the name of the input file with _invalid
-                    invalid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName+"/"+name_file+"_invalid.txt") );
+                    invalid_Output_file = new BufferedWriter(new FileWriter(OutputFolderName + "/" + name_file + "_invalid.txt"));
                 } catch (IOException ex) {
                     Logger.getLogger(GUI_Builder.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 String line;
                 while ((line = br.readLine()) != null) {
-                    boolean valid= isValidEmailAddress(line);
-                    if (valid==true) {
-                        System.out.println("valid"+line);
+                    boolean valid = isValidEmailAddress(line);
+                    if (valid == true) {
+                        System.out.println("valid" + line);
                         valid_Output_file.append(line);
                         valid_Output_file.newLine();
-                        
+
                     } else {
-                        System.out.println("invalid"+line);
+                        System.out.println("invalid" + line);
                         invalid_Output_file.append(line);
                         invalid_Output_file.newLine();
-                        
                     }
                 }
             } catch (IOException ex) {
@@ -330,19 +349,19 @@ public class GUI_Builder extends javax.swing.JFrame {
 
     private boolean isValidEmailAddress(String mail) {
         /*
-        ^ matches beginning of line
-        [a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+ means one or more of the previous symbols
-        @ (which is compusory)
-        (([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,})
-        - [a-zA-Z\\-0-9]+\\. means: one or more of symbols [a-zA-Z\\-0-9] followed by "." (\\. means exactly ".")
-        - pay attention to \\- which means that the "-" symbol is allowed
-        - the former structure could be repeated if needed, because of "+"
-        - at least two characters in [a-zA-Z] after the "."
-        $ matches end of line
-        */
+         ^ matches beginning of line
+         [a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+ means one or more of the previous symbols
+         @ (which is compusory)
+         (([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,})
+         - [a-zA-Z\\-0-9]+\\. means: one or more of symbols [a-zA-Z\\-0-9] followed by "." (\\. means exactly ".")
+         - pay attention to \\- which means that the "-" symbol is allowed
+         - the former structure could be repeated if needed, because of "+"
+         - at least two characters in [a-zA-Z] after the "."
+         $ matches end of line
+         */
         String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,})$";
-    java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
-    java.util.regex.Matcher m = p.matcher(mail);
-    return m.matches(); 
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(mail);
+        return m.matches();
     }
 }

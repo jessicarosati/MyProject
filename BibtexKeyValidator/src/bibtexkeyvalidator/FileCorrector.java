@@ -23,44 +23,45 @@ import javax.swing.JOptionPane;
  * @author Jessica
  */
 public class FileCorrector {
-    FileCorrector(File fileInput, HashSet<String> invalid_characters, BufferedReader br, BufferedWriter Correct_file, String[] invalidDefault){     
+
+    FileCorrector(File fileInput, HashSet<String> invalid_characters, BufferedReader br, BufferedWriter Correct_file, String[] invalidDefault) {
         try {
             for (int i = 0; i < invalidDefault.length; i++) {
                 invalid_characters.add(invalidDefault[i]);
             }
-            System.out.println("filecorrector"+invalid_characters);
+            System.out.println("filecorrector" + invalid_characters);
             try {
                 br = new BufferedReader(new FileReader(fileInput.toString()));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, "Input file not found", ex);
             }
             try {
-                Correct_file = new BufferedWriter(new FileWriter(fileInput.toString().replace(".bib", "")+"_Correct.bib") );
+                Correct_file = new BufferedWriter(new FileWriter(fileInput.toString().replace(".bib", "") + "_Correct.bib"));
             } catch (IOException ex) {
                 Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, null, ex);
             }
             String line;
             while ((line = br.readLine()) != null) {
                 // I read the file line by line and consider lines starting with @ and ending with ","
-                if (line.startsWith("@")&&line.endsWith(",")) {
-                    String head= line.substring(0, line.lastIndexOf("{"));
+                if (line.startsWith("@") && line.endsWith(",")) {
+                    String head = line.substring(0, line.lastIndexOf("{"));
                     // I extract the bibtexKey 
                     String bibtexKey = line.substring(line.lastIndexOf("{"), line.lastIndexOf(","));
                     for (Iterator<String> iterator = invalid_characters.iterator(); iterator.hasNext();) {
                         String character = iterator.next();
-                        bibtexKey= bibtexKey.replace(character,"");// I cancel the invalid_character
+                        bibtexKey = bibtexKey.replace(character, "");// I cancel the invalid_character
                     }
-                    String tail= line.substring(line.lastIndexOf(","), line.length());
+                    String tail = line.substring(line.lastIndexOf(","), line.length());
                     // I rebuild the line with the corrected bibtexKey
-                    line=head+bibtexKey+tail;
+                    line = head + bibtexKey + tail;
                     Correct_file.write(line);
                     Correct_file.write("\n");
-                }else{
+                } else {
                     Correct_file.write(line);
                     Correct_file.write("\n");
                 }
-            }
-            JOptionPane.showMessageDialog(null,"Everything fine! Look at "+fileInput+"_Correct.bib");
+            }// I print out the path for the output file
+            JOptionPane.showMessageDialog(null, "Everything fine! Look at " + fileInput + "_Correct.bib");
         } catch (IOException ex) {
             Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -68,10 +69,8 @@ public class FileCorrector {
             br.close();
             Correct_file.close();
         } catch (IOException ex) {
-            Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CorrectBibtex.class.getName()).log(Level.SEVERE, "error in buffer file closure", ex);
         }
     }
-  
-       
-    }
 
+}
