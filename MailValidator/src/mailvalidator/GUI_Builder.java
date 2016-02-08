@@ -37,6 +37,7 @@ public class GUI_Builder extends javax.swing.JFrame {
      */
     public GUI_Builder() {
         initComponents();
+        // I use the screen size to set the location of the frame
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((int) (dim.getWidth() - getWidth()) / 10, (int) (dim.getHeight() - getHeight()) / 2);
     }
@@ -170,7 +171,7 @@ public class GUI_Builder extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // jButton1 lets to select an Inut File and write its name into jTextField1
+        // jButton1 lets to select an Input File and write its name into jTextField1
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
         JFileChooser fileChooser = new JFileChooser();
         int returnVal = fileChooser.showOpenDialog(fileChooser);
@@ -191,7 +192,7 @@ public class GUI_Builder extends javax.swing.JFrame {
         // jButton2 lets to select the output folder and write its name into jTextField2
         JComponent.setDefaultLocale(java.util.Locale.ENGLISH);
         JFileChooser fileChooser = new JFileChooser();
-        // we set DIRECTORIES_ONLY mode
+        // I set DIRECTORIES_ONLY mode
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnVal = fileChooser.showOpenDialog(fileChooser);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -201,8 +202,7 @@ public class GUI_Builder extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // jButton4 launches the email validator
-        //  
+        // jButton4 launches the email validator  
         if (jTextField1.getText().isEmpty() || fileInput == null || !fileInput.toString().equals(jTextField1.getText())) {
             //Error message if the Input File has not been correctly selected
             JOptionPane.showMessageDialog(null, "Use button \"Select I\" to select the Input File please");
@@ -215,7 +215,7 @@ public class GUI_Builder extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Validation Successfully Completed");
         }
 
-        /* if you want to let manually insertion remove this comment and comment previous if-else block
+        /* //if you want to let manually insertion remove this comment and comment previous if-else block
          if(jTextField1.getText().isEmpty()){ //Error message if the Input File has not been selected
          JOptionPane.showMessageDialog(null,"Select the Input File Please");
          }
@@ -298,6 +298,8 @@ public class GUI_Builder extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void validateAddresses(File fileInput, String OutputFolderName) {
+        //this method write the content of two files: one for valid email addresses (ends with "_valid.txt") and the other for
+        //invalid email addresses (ends with "_invalid.txt")
         try {
             try {
                 String name_file = fileInput.toString();
@@ -326,12 +328,10 @@ public class GUI_Builder extends javax.swing.JFrame {
                 while ((line = br.readLine()) != null) {
                     boolean valid = isValidEmailAddress(line);
                     if (valid == true) {
-                        System.out.println("valid" + line);
                         valid_Output_file.append(line);
                         valid_Output_file.newLine();
 
                     } else {
-                        System.out.println("invalid" + line);
                         invalid_Output_file.append(line);
                         invalid_Output_file.newLine();
                     }
@@ -348,7 +348,7 @@ public class GUI_Builder extends javax.swing.JFrame {
     }
 
     private boolean isValidEmailAddress(String mail) {
-        /*
+        /* the email validation is done according to a regular expression
          ^ matches beginning of line
          [a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+ means one or more of the previous symbols
          @ (which is compusory)

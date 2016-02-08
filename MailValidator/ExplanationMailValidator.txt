@@ -1,0 +1,11 @@
+The tool lets to validate an email.
+
+Pros
+-The source code is well documented 
+	- At the beginning of each method there is an explanation and the same is for actions associated to buttons;
+	- Whenever I manage inputs or I perform complex operations on strings I try to explain the underlying reasoning.
+-Given the presence of a GUI, I recommend to work with Netbeans IDE, since the code about the JFrame (its structure, its components, etc...) shrinks into a single line (initComponents();).
+- The tool provides meaningful error messages and advices to the user. It guides user's interaction with the system.
+
+Cons
+- I used a regular expression to validate the email since, for example the JavaMail API does not check the presence of a "." after the @, as requested. I also considered class EmailValidator in apache commons-validator, but I didn't find any offical justification of it, based on some standard (RFC). 
