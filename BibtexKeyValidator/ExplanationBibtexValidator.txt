@@ -1,0 +1,14 @@
+The tool lets to correct a bibTex file.
+
+Pros
+-The source code is well documented 
+	- At the beginning of each method there is an explanation and the same is for actions associated to buttons;
+	- Whenever I manage inputs or I perform complex operations on strings I try to explain the underlying reasoning.
+-I followed the hint given in the assignment and I let the user to introduce additional invalid characters.
+-My code creates a new document with the corrected content. If you prefer to overwrite the input file, you can just setting "true" to the last parameter of CorrectBibtex.java (lines 197 and 206), but this will cause the program running slower. It's up to you!	  
+-Given the presence of a GUI, I recommend to work with Netbeans IDE, since the code about the JFrame (its structure, its components, etc...) shrinks into a single line (initComponents();).
+- The tool provides meaningful error messages and advices to the user. It guides user's interaction with the system.
+
+Cons
+- Using white spaces to separate inserted invalid characters, the code cannot consider the " " (white space) itself as an invalid character.
+- I ask the user to explicitly select the input file. I could have managed easily the situation when he writes the file path but probably the code would have been uselessly complex.  
