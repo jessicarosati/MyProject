@@ -16,6 +16,8 @@ public class MailValidator {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        GUI_Builder window= new GUI_Builder();
+        window.setVisible(true);
     }
 
 }

@@ -14,4 +14,9 @@ public class BibtexKeyValidator {
     /**
      * @param args the command line arguments
      */
+    
+    public static void main(String[] args) {
+        CorrectBibtex window = new CorrectBibtex();
+        window.setVisible(true);
+    }
 }

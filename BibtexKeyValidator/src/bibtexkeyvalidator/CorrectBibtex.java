@@ -33,6 +33,7 @@ public class CorrectBibtex extends javax.swing.JFrame {
      */
     public CorrectBibtex() {
         initComponents();
+        // I use the screen size to set the location of the frame
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((int) (dim.getWidth() - getWidth()) / 12, (int) (dim.getHeight() - getHeight()) / 2);
     }
@@ -190,9 +191,10 @@ public class CorrectBibtex extends javax.swing.JFrame {
             fileInput = null;
             JOptionPane.showMessageDialog(null, "Use button \"Select\" to select the Input File Please");
         } else if (jTextField2.getText().isEmpty()) {
-            // I call a FileCorrector
+            // I directly call a FileCorrector: the user has not inserted additional invalid characters
             FileCorrector corrector;
-            corrector = new FileCorrector(fileInput, invalid_characters, br, correct_file, invalidDefault);
+            //use false as last parameter to write a new correct file or true to overwrite the input file 
+            corrector = new FileCorrector(fileInput, invalid_characters, invalidDefault, false);
         } else // I verify if the array of inserted invalid characters is written in the right way
         if (analyseInvalidCharacters(jTextField2) == null) {
             JOptionPane.showMessageDialog(null, "Wrong way to write Invalid Characters. Look at \"Help\" button");
@@ -200,7 +202,8 @@ public class CorrectBibtex extends javax.swing.JFrame {
             invalid_characters = analyseInvalidCharacters(jTextField2);
             // I call a FileCorrector with invalid_characters just filled
             FileCorrector corrector;
-            corrector = new FileCorrector(fileInput, invalid_characters, br, correct_file, invalidDefault);
+            //use false as last parameter to write a new correct file or true to overwrite the input file
+            corrector = new FileCorrector(fileInput, invalid_characters, invalidDefault, false);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -252,12 +255,17 @@ public class CorrectBibtex extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private HashSet<String> analyseInvalidCharacters(JTextField jTextField2) {
+        /*
+         This method verifies if the user has written valid Invalid Characters in jTextField2.
+         It splits the string corresponding to jTextField2 through white space and
+         checks the length of each substring, which must me equal to 1, being a single character 
+         */
         String invalid = jTextField2.getText();
         String[] characters = invalid.split(" ");
         for (int i = 0; i < characters.length; i++) {
-            if (characters[i].length() > 1) {
+            if (characters[i].length() > 1) {//not a single character: the method response is somehow negative 
                 return null;
-            } else {
+            } else {//I add the examined character to my set of invalid characters 
                 invalid_characters.add(characters[i]);
             }
         }
